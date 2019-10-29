@@ -23,5 +23,7 @@ class SearchWeb: AnAction() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
+        // TODO Returns NullPointerException when pressing the "Cancel" button on the dialog
     }
 }
