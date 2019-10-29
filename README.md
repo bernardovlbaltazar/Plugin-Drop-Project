@@ -15,7 +15,7 @@ This plugin is made by a student to another and future students
  
  ## Usage
  
- In order to use this project, clone the project in any repository you want using the command
+ In order to use this project, clone the project in any directory you want using the command
  
  <code>git clone https://github.com/yashjahit-21705201/Plugin-Drop-Project.git</code>
  
