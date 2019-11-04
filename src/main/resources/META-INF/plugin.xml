@@ -20,13 +20,13 @@
     <actions>
         <group id="PluginDrop.MainClass" text="Drop Project" description="Options for drop project">
             <add-to-group group-id="MainMenu" anchor="last"/>
-            <action class="com.tfc.ulht.Main" id="OpenMenuAndShowOptions" text="Submit"/>
+            <!-- <action class="com.tfc.ulht.SignIn" id="SignIn" text="Sign in"/> -->
+            <action class="com.tfc.ulht.loginComponents.MainLogin" id="OpenMenuAndShowOptions" text="Log In"/>
             <action class="com.tfc.ulht.SearchWeb" id="SearchTheWeb" text="Search on the Web"/>
             <group id="InputDialog" text="Input" popup="true">
                 <action id="ShowUserMessage" text="Click Here!" class="com.tfc.ulht.ShowUserWritedMessage"/>
             </group>
             <action class="com.tfc.ulht.AboutMe" id="AboutMe" text="About Me"/>
-
         </group>
     </actions>
 </idea-plugin>
