@@ -25,6 +25,8 @@ class Authentication {
 
     fun checkCredentials(username: String, password: String): Boolean {
         return hardCodedUsername.equals(username) && hardCodedPassword.equals(password)
+
+
     }
 
 }
