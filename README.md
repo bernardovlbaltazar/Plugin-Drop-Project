@@ -1,5 +1,4 @@
-[[https://github.com/yashjahit-21705201/Plugin-Drop-Project/blob/master/src/main/resources/docs/plugin_dp_logo.png|
-Drop Project Plugin for IntelliJ]]
+<img width="77px" height="77px" align="right" src="src/main/resources/docs/plugin_dp_logo.png" alt="Plugin Drop Project for IntelliJ"/>
 
 # Drop Project Plugin
 
