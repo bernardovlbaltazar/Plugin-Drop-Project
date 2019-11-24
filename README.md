@@ -1,3 +1,6 @@
+[[https://github.com/yashjahit-21705201/Plugin-Drop-Project/blob/master/src/main/resources/docs/plugin_dp_logo.png|
+Drop Project Plugin for IntelliJ]]
+
 # Drop Project Plugin
 
 This plugin is made by a student to another and future students
