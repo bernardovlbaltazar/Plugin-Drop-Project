@@ -13,7 +13,7 @@ This plugin is made by a student to another and future students
  
  <li>Gradle installed (instructions can be found <a href="https://gradle.org/install/">here</a></li>
  <li>Java JDK +8</li>
- <li>IntelliJ installed (any version will suffice)</li>
+ <li>IntelliJ installed (version 2019.2 & upwards)</li>
  
  ## Usage
  
