@@ -1,4 +1,4 @@
-<img width="200px" height="200px" align="right" src="src/main/resources/docs/plugin_dp_logo.png" alt="Plugin Drop Project for IntelliJ"/>
+<img width="200px" height="200px" align="right" src="src/main/resources/images/plugin_dp_logo.png" alt="Plugin Drop Project for IntelliJ"/>
 
 # Drop Project Plugin
 
