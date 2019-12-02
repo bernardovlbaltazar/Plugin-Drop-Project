@@ -22,6 +22,7 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.tfc.ulht.CreateAuthorsFile
+import com.tfc.ulht.ZipFolder
 import java.awt.GridLayout
 import java.io.File
 import javax.swing.JPanel
@@ -40,5 +41,7 @@ class MainLogin : AnAction() {
         if (!checkFile.exists()) {
             CreateAuthorsFile().actionPerformed(e)
         }
+
+        ZipFolder().actionPerformed(e)
     }
 }

@@ -11,11 +11,12 @@ class SearchWeb: AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         var searchFor = Messages.showInputDialog(e.project, "What do you want to search?", "Search", Messages.getQuestionIcon())
 
-        val url = URI(searchFor)
-        searchWeb(url)
+        if (searchFor != null) {
+            searchWeb(searchFor)
+        }
     }
 
-    private fun searchWeb(url: URI) {
+    private fun searchWeb(url: String) {
         try {
             val googleLink = "https://www.google.com/search?q="
             val openWeb = java.awt.Desktop.getDesktop()
@@ -23,7 +24,5 @@ class SearchWeb: AnAction() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        // TODO Returns NullPointerException when pressing the "Cancel" button on the dialog
     }
 }
