@@ -42,6 +42,12 @@ class MainLogin : AnAction() {
             CreateAuthorsFile().actionPerformed(e)
         }
 
-        ZipFolder().actionPerformed(e)
+        val checkIfZipExists = File("$projectDirectory/projeto.zip")
+        if (!checkIfZipExists.exists()) {
+            ZipFolder().actionPerformed(e)
+        } else {
+            checkIfZipExists.delete()
+            ZipFolder().actionPerformed(e)
+        }
     }
 }

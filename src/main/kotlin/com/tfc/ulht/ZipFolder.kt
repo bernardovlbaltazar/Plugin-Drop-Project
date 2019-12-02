@@ -71,8 +71,6 @@ class ZipFolder : AnAction() {
 
                 zos.closeEntry()
                 fis.close()
-
-                println(ipfile.absolutePath + "is zipped")
             }
 
             zos.close()
