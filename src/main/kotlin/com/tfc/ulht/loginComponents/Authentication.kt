@@ -18,15 +18,40 @@
 
 package com.tfc.ulht.loginComponents
 
+import okhttp3.*
+import java.io.IOException
+
 class Authentication {
 
-    val hardCodedUsername: String = "admin"
-    val hardCodedPassword: String = "1234"
+    var serverResponse: Boolean = false
 
     fun checkCredentials(username: String, password: String): Boolean {
-        return hardCodedUsername.equals(username) && hardCodedPassword.equals(password)
 
 
+        val httpClient = OkHttpClient.Builder()
+            .authenticator(object : Authenticator {
+                @Throws(IOException::class)
+                override fun authenticate(route: Route?, response: Response): Request? {
+                    if (response.request().header("Authorization") != null) {
+                        return null // Give up, we've already attempted to authenticate.
+                    }
+
+                    return response.request().newBuilder()
+                        .header("Authorization", Credentials.basic(username, password))
+                        .build()
+                }
+            })
+            .build()
+
+        val request = Request.Builder()
+            .url("http://localhost:8080/")
+            .build()
+
+        httpClient.newCall(request).execute().use { response ->
+            serverResponse = response.isSuccessful
+        }
+
+        return serverResponse
     }
 
 }

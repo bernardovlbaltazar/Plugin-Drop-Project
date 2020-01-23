@@ -22,9 +22,13 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.tfc.ulht.CreateAuthorsFile
+import com.tfc.ulht.Users
 import com.tfc.ulht.ZipFolder
+import java.awt.Dimension
+import java.awt.FlowLayout
 import java.awt.GridLayout
 import java.io.File
+import javax.swing.JFrame
 import javax.swing.JPanel
 
 class MainLogin : AnAction() {
@@ -32,7 +36,8 @@ class MainLogin : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val projectDirectory = e.project?.let { FileEditorManager.getInstance(it).project.basePath.toString() }
 
-        val panel = JPanel(GridLayout(2, 2))
+//        val panel = JPanel(GridLayout(5, 5))
+        val panel = JPanel()
 
         LoginDialog().assembleDialog(panel)
 

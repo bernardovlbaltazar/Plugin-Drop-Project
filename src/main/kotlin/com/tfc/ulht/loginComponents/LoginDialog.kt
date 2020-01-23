@@ -18,80 +18,194 @@
 
 package com.tfc.ulht.loginComponents
 
+import TextPrompt
+import com.intellij.sisyphus.api.User
 import com.tfc.ulht.CreateAuthorsFile
+import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
-import java.awt.Insets
+import java.awt.event.ActionListener
 import javax.swing.*
+import com.tfc.ulht.Users
+import java.awt.GridLayout
+
 
 class LoginDialog {
 
-    val usernameField = JTextField()
+    companion object {
+        val studentsList = ArrayList<Users>()
+    }
+
+    private var GRIDY: Int = 3
+    val nameLabel = JLabel("Name:   ")
     val usernameLabel = JLabel("Username:   ")
     val passwordField = JPasswordField()
     val passwordLabel = JLabel("Password:   ")
+    val addGroupStudents = JButton("Click here to add your group elements")
+    val studentNumberField = mutableListOf<JTextField>()
+    val studentNameField = mutableListOf<JTextField>()
+    val numberField = JTextField()
+    val nameField = JTextField()
+
 
     fun assembleDialog(panel: JPanel) {
+
         val gbPanel = GridBagLayout()
         val gbc = GridBagConstraints()
+        var countUsers = 0
 
-        panel.layout = gbPanel
+        panel.layout = GridLayout(6, 2)
 
-        gbc.gridx = 1; gbc.gridy = 4; gbc.gridwidth = 5; gbc.gridheight = 2
-        gbc.fill = GridBagConstraints.BOTH
-        gbc.weightx = 1.0; gbc.weighty = 1.0
-        gbc.anchor = GridBagConstraints.NORTH
-        gbc.insets = Insets(0, 10, 0, 0)
+        /**
+         * Name
+         */
+        gbc.gridx = 0; gbc.gridy = 0
+        gbc.gridwidth = 1
+        gbc.fill = GridBagConstraints.HORIZONTAL
+        gbPanel.setConstraints(nameLabel, gbc)
+        panel.add(nameLabel)
+
+        studentNameField.add(nameField)
+        gbc.gridx = 1; gbc.gridy = 0
+        gbc.gridwidth = 3
+        gbPanel.setConstraints(studentNameField[countUsers], gbc)
+        panel.add(nameField)
+
+        /**
+         * Username
+         */
+        gbc.gridx = 0; gbc.gridy = 1
         gbPanel.setConstraints(usernameLabel, gbc)
         panel.add(usernameLabel)
 
-        gbc.gridx = 6; gbc.gridy = 4; gbc.gridwidth = 12; gbc.gridheight = 2
-        gbc.fill = GridBagConstraints.BOTH
-        gbc.weightx = 1.0; gbc.weighty = 0.0
-        gbc.anchor = GridBagConstraints.NORTH
-        gbPanel.setConstraints(usernameField, gbc)
-        panel.add(usernameField)
+        studentNumberField.add(numberField)
+        gbc.gridx = 1; gbc.gridy = 1
+        gbPanel.setConstraints(studentNumberField[countUsers], gbc)
+        panel.add(studentNumberField[countUsers])
 
-        gbc.gridx = 1; gbc.gridy = 8; gbc.gridwidth = 5; gbc.gridheight = 2
-        gbc.fill = GridBagConstraints.BOTH
-        gbc.weightx = 1.0; gbc.weighty = 1.0
-        gbc.anchor = GridBagConstraints.NORTH
-        gbc.insets = Insets(0, 10, 0, 0)
+        /**
+         * Password
+         */
+        gbc.gridx = 0; gbc.gridy = 2
         gbPanel.setConstraints(passwordLabel, gbc)
         panel.add(passwordLabel)
 
-        gbc.gridx = 6; gbc.gridy = 8; gbc.gridwidth = 12; gbc.gridheight = 2
-        gbc.fill = GridBagConstraints.BOTH
-        gbc.weightx = 1.0; gbc.weighty = 0.0
-        gbc.anchor = GridBagConstraints.NORTH
+        gbc.gridx = 1; gbc.gridy = 2
         gbPanel.setConstraints(passwordField, gbc)
         panel.add(passwordField)
 
+        /**
+         * Add more students
+         */
+        gbc.gridx = 0; gbc.gridy = 3
+        gbPanel.setConstraints(addGroupStudents, gbc)
+        panel.add(addGroupStudents)
+
+        /**
+         * Empty label after add students button
+         */
+        val empty_label = JLabel()
+        panel.add(empty_label)
+
+
+        val actionListener = ActionListener { actionEvent ->
+            if (countUsers < 2) {
+                println("Button pressed")
+                countUsers++
+                addMoreStudents(panel, gbc, gbPanel, countUsers)
+            }
+        }
+
+        addGroupStudents.addActionListener(actionListener)
 
         val opt = arrayOf("Log In", "Cancel")
+        UIManager.put("OptionPane.minimumSize", Dimension(panel.width, panel.height))
         val option = JOptionPane.showOptionDialog(
             null, panel, "Log In",
             JOptionPane.YES_NO_OPTION, JOptionPane.DEFAULT_OPTION, null, opt, opt[0]
         )
 
+        /**
+         * Check credential
+         *
+         * @param response
+         * @return True if credential is valid
+         * */
         if (option == 0) {
+
+
             val response = Authentication().checkCredentials(
-                usernameField.getText().trim(),
+                studentNumberField[0].text.trim(),
                 String(passwordField.password)
             )
 
-            if (response) {
-                JOptionPane.showMessageDialog(null, "Login Success")
-            } else {
+            UIManager.put("OptionPane.minimumSize", Dimension(200, 100))
+
+
+            if (response && !checkIfCorrectNumber()) {
+                JOptionPane.showMessageDialog(null, "Login Successful")
+            } else if (!response) {
                 JOptionPane.showMessageDialog(
-                    null, "Login Wrong!", "Error!",
+                    null, "Login credentials incorrect!", "Error!",
                     JOptionPane.ERROR_MESSAGE
                 )
-                assembleDialog(JPanel())
+            } else {
+                // Show error message in checkIfNumber() function
             }
 
         } else {
             println("Cancel!")
         }
+    }
+
+    private fun addMoreStudents(panel: JPanel, gbc: GridBagConstraints, gbPanel: GridBagLayout, count: Int): JPanel {
+
+        val numberField = JTextField()
+        val nameField = JTextField()
+
+        val numberFieldPrompt = TextPrompt("Write your student number here",
+            numberField, TextPrompt.Show.FOCUS_LOST)
+        numberFieldPrompt.changeAlpha(0.5f)
+
+        val  nameFieldPrompt = TextPrompt("Write your student name here",
+            nameField, TextPrompt.Show.FOCUS_LOST)
+        nameFieldPrompt.changeAlpha(0.5f)
+
+        studentNumberField.add(numberField)
+        studentNameField.add(nameField)
+
+        gbc.gridx = 0; gbc.gridy = GRIDY++
+        gbc.fill = GridBagConstraints.HORIZONTAL
+        gbPanel.setConstraints(studentNumberField[count], gbc)
+
+        panel.add(studentNumberField[count])
+
+        gbc.gridx = 1; gbc.gridy = GRIDY
+        gbc.fill = GridBagConstraints.HORIZONTAL
+        gbPanel.setConstraints(studentNameField[count], gbc)
+        panel.add(studentNameField[count])
+
+        panel.parent.revalidate()
+        return panel
+    }
+
+    private fun checkIfCorrectNumber(): Boolean {
+
+        var index = 0
+        for (number in studentNumberField) {
+            val addOrNot = number.text.trim().contains('a') && number.text.length== 9
+
+            if (addOrNot) {
+                studentsList.add(Users(number.text.trim(), studentNameField[index].text.trim()))
+                index++
+            } else {
+                JOptionPane.showMessageDialog(null,
+                    "User ${number.text.trim()} is not in the correct format, please try again",
+                    "Error in student number", JOptionPane.ERROR_MESSAGE)
+                return true
+            }
+        }
+
+        return false
     }
 }

@@ -3,12 +3,13 @@ package com.tfc.ulht
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.fileEditor.FileEditorManager
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.*
+import java.util.zip.ZipOutputStream;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.zip.ZipEntry;
+
 
 
 /*-
@@ -31,70 +32,59 @@ import java.util.zip.ZipOutputStream
 
 class ZipFolder : AnAction() {
 
+    companion object {
+        var totalFiles = ArrayList<String>()
+    }
+
     override fun actionPerformed(e: AnActionEvent) {
 
-        // TODO: Plugin cria zip, agora falta implementar algo para zippar so alguns ficheiros (/src, AUTHORS.txt, etc.)
+        // TODO: Melhor apagR
 
+        /**
+         * Returns project path on system. Ex: C:/Users/yashj/IdeaProjects/Base de dados
+         */
         val projectDirectory = e.project?.let { FileEditorManager.getInstance(it).project.basePath.toString() }
-
         println(projectDirectory)
 
+        var zipDir = "${projectDirectory}\\projeto.zip"
+
+        zipFolderStructure(projectDirectory, zipDir)
+
+
+    }
+
+    private fun zipFolderStructure(projectDirectory: String?, zipDir: String){
         try {
-            val dir = File("$projectDirectory")
-            val dirPath = dir.absolutePath
-            val obj = ZipFolder()
+            FileOutputStream(zipDir).use { fos-> ZipOutputStream(fos).use { zos->
+                val sourcePath = Paths.get(projectDirectory)
+                Files.walkFileTree(sourcePath, object:SimpleFileVisitor<Path>() {
+                    @Throws(IOException::class)
+                    override
+                    fun preVisitDirectory(dir:Path, attrs:BasicFileAttributes):FileVisitResult {
+                        if (sourcePath != dir && dir.toString().startsWith("$sourcePath\\src")) {
+                            zos.putNextEntry(ZipEntry(sourcePath.relativize(dir).toString() + "/"))
+                            zos.closeEntry()
+                        }
+                        return FileVisitResult.CONTINUE
+                    }
+                    @Throws(IOException::class)
+                    override
+                    fun visitFile(file:Path, attrs:BasicFileAttributes):FileVisitResult {
+                        if (sourcePath.relativize(file).toString() == "AUTHORS.txt"
+                            || file.toString().startsWith("$sourcePath\\src")) {
+                            zos.putNextEntry(ZipEntry(sourcePath.relativize(file).toString()))
+                            Files.copy(file, zos)
+                            zos.closeEntry()
+                            return FileVisitResult.CONTINUE
+                        }
 
-            obj.listFiles(dir)
-
-            val zipFile = File("$projectDirectory/projeto.zip")
-
-
-            val fos = FileOutputStream(zipFile)
-            val zos = ZipOutputStream(fos)
-
-            val buffer = ByteArray(1024)
-            var len: Int
-
-            for (path: String in Companion.totalFiles) {
-                val ipfile = File(path)
-
-                val zippath = path.substring(dirPath.length + 1, path.length)
-                val zen = ZipEntry(zippath)
-
-                zos.putNextEntry(zen)
-
-                val fis = FileInputStream(ipfile)
-
-                while (fis.read(buffer).also { len = it } > 0) {
-                    zos.write(buffer, 0, len)
-                }
-
-                zos.closeEntry()
-                fis.close()
-            }
-
-            zos.close()
-            fos.close()
+                        return FileVisitResult.CONTINUE
+                    }
+                })
+            } }
 
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
-    }
-
-    private fun listFiles(dir: File)  {
-        val files = dir.listFiles()
-
-        for (file in files) {
-            if (file.isDirectory) {
-                listFiles(file)
-            } else {
-                totalFiles.add(file.absolutePath)
-            }
-        }
-    }
-
-    companion object {
-        var totalFiles = ArrayList<String>()
     }
 }
