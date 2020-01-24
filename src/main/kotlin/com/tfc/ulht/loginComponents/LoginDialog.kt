@@ -19,8 +19,6 @@
 package com.tfc.ulht.loginComponents
 
 import TextPrompt
-import com.intellij.sisyphus.api.User
-import com.tfc.ulht.CreateAuthorsFile
 import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
@@ -144,6 +142,7 @@ class LoginDialog {
 
             if (response && !checkIfCorrectNumber()) {
                 JOptionPane.showMessageDialog(null, "Login Successful")
+                Authentication.alreadyLoggedIn = true
             } else if (!response) {
                 JOptionPane.showMessageDialog(
                     null, "Login credentials incorrect!", "Error!",
@@ -156,6 +155,7 @@ class LoginDialog {
         } else {
             println("Cancel!")
         }
+
     }
 
     private fun addMoreStudents(panel: JPanel, gbc: GridBagConstraints, gbPanel: GridBagLayout, count: Int): JPanel {

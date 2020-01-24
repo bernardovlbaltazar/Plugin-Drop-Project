@@ -18,17 +18,23 @@
 
 package com.tfc.ulht.loginComponents
 
+import com.intellij.openapi.actionSystem.AnActionEvent
 import okhttp3.*
 import java.io.IOException
 
 class Authentication {
 
+    companion object {
+        var httpClient = OkHttpClient()
+        var alreadyLoggedIn = false
+    }
+
     var serverResponse: Boolean = false
 
-    fun checkCredentials(username: String, password: String): Boolean {
+    fun checkCredentials(username: String, password: String, firstRun: Boolean = false): Boolean {
 
 
-        val httpClient = OkHttpClient.Builder()
+        httpClient = OkHttpClient.Builder()
             .authenticator(object : Authenticator {
                 @Throws(IOException::class)
                 override fun authenticate(route: Route?, response: Response): Request? {
@@ -49,6 +55,10 @@ class Authentication {
 
         httpClient.newCall(request).execute().use { response ->
             serverResponse = response.isSuccessful
+        }
+
+        if (serverResponse && !firstRun) {
+            CredentialsController().encryptPassword(username, password)
         }
 
         return serverResponse

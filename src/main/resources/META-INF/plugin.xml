@@ -15,6 +15,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+        <postStartupActivity implementation="com.tfc.ulht.OnStartup"/>
     </extensions>
 
     <actions>
