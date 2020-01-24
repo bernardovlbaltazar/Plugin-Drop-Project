@@ -2,6 +2,8 @@
 
 # Drop Project Plugin
 
+[![Build Status](https://travis-ci.com/yashjahit-21705201/Plugin-Drop-Project.svg?branch=master)](https://travis-ci.com/yashjahit-21705201/Plugin-Drop-Project)
+
 This plugin is made by a student to another and future students
  who use the Drop Project website for submissions to help automate
  the process of submitting the projects on the system.
