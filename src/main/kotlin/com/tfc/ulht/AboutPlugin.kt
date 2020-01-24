@@ -8,10 +8,12 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.DumbAware
 import java.net.URI
-import javax.swing.*
+import javax.swing.Icon
+import javax.swing.ImageIcon
+import javax.swing.JOptionPane
 
 
-class AboutPlugin: DumbAware, AnAction() {
+class AboutPlugin : DumbAware, AnAction() {
 
     override fun actionPerformed(e: AnActionEvent) {
 
@@ -24,7 +26,8 @@ class AboutPlugin: DumbAware, AnAction() {
             text,
             "About",
             JOptionPane.INFORMATION_MESSAGE,
-            imageIconCreate())
+            imageIconCreate()
+        )
 
     }
 

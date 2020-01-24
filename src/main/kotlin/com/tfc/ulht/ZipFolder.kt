@@ -3,13 +3,12 @@ package com.tfc.ulht
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.fileEditor.FileEditorManager
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.FileOutputStream
+import java.io.IOException
 import java.nio.file.*
-import java.util.zip.ZipOutputStream;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.zip.ZipEntry;
-
+import java.nio.file.attribute.BasicFileAttributes
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 
 /*-
@@ -53,35 +52,39 @@ class ZipFolder : AnAction() {
 
     }
 
-    private fun zipFolderStructure(projectDirectory: String?, zipDir: String){
+    private fun zipFolderStructure(projectDirectory: String?, zipDir: String) {
         try {
-            FileOutputStream(zipDir).use { fos-> ZipOutputStream(fos).use { zos->
-                val sourcePath = Paths.get(projectDirectory)
-                Files.walkFileTree(sourcePath, object:SimpleFileVisitor<Path>() {
-                    @Throws(IOException::class)
-                    override
-                    fun preVisitDirectory(dir:Path, attrs:BasicFileAttributes):FileVisitResult {
-                        if (sourcePath != dir && dir.toString().startsWith("$sourcePath\\src")) {
-                            zos.putNextEntry(ZipEntry(sourcePath.relativize(dir).toString() + "/"))
-                            zos.closeEntry()
-                        }
-                        return FileVisitResult.CONTINUE
-                    }
-                    @Throws(IOException::class)
-                    override
-                    fun visitFile(file:Path, attrs:BasicFileAttributes):FileVisitResult {
-                        if (sourcePath.relativize(file).toString() == "AUTHORS.txt"
-                            || file.toString().startsWith("$sourcePath\\src")) {
-                            zos.putNextEntry(ZipEntry(sourcePath.relativize(file).toString()))
-                            Files.copy(file, zos)
-                            zos.closeEntry()
+            FileOutputStream(zipDir).use { fos ->
+                ZipOutputStream(fos).use { zos ->
+                    val sourcePath = Paths.get(projectDirectory)
+                    Files.walkFileTree(sourcePath, object : SimpleFileVisitor<Path>() {
+                        @Throws(IOException::class)
+                        override
+                        fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+                            if (sourcePath != dir && dir.toString().startsWith("$sourcePath\\src")) {
+                                zos.putNextEntry(ZipEntry(sourcePath.relativize(dir).toString() + "/"))
+                                zos.closeEntry()
+                            }
                             return FileVisitResult.CONTINUE
                         }
 
-                        return FileVisitResult.CONTINUE
-                    }
-                })
-            } }
+                        @Throws(IOException::class)
+                        override
+                        fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+                            if (sourcePath.relativize(file).toString() == "AUTHORS.txt"
+                                || file.toString().startsWith("$sourcePath\\src")
+                            ) {
+                                zos.putNextEntry(ZipEntry(sourcePath.relativize(file).toString()))
+                                Files.copy(file, zos)
+                                zos.closeEntry()
+                                return FileVisitResult.CONTINUE
+                            }
+
+                            return FileVisitResult.CONTINUE
+                        }
+                    })
+                }
+            }
 
         } catch (e: IOException) {
             e.printStackTrace()

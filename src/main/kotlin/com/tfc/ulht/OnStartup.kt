@@ -23,12 +23,9 @@ import com.intellij.openapi.startup.StartupActivity
 import com.tfc.ulht.loginComponents.Authentication
 import com.tfc.ulht.loginComponents.CredentialsController
 import java.io.File
-import java.io.FileInputStream
-import java.security.KeyStore
-import java.util.*
 
 
-class OnStartup: StartupActivity {
+class OnStartup : StartupActivity {
 
     companion object {
         val pass = "password".toCharArray()

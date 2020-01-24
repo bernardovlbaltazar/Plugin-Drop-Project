@@ -19,13 +19,13 @@
 package com.tfc.ulht.loginComponents
 
 import TextPrompt
+import com.tfc.ulht.Users
 import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
+import java.awt.GridLayout
 import java.awt.event.ActionListener
 import javax.swing.*
-import com.tfc.ulht.Users
-import java.awt.GridLayout
 
 
 class LoginDialog {
@@ -163,12 +163,16 @@ class LoginDialog {
         val numberField = JTextField()
         val nameField = JTextField()
 
-        val numberFieldPrompt = TextPrompt("Write your student number here",
-            numberField, TextPrompt.Show.FOCUS_LOST)
+        val numberFieldPrompt = TextPrompt(
+            "Write your student number here",
+            numberField, TextPrompt.Show.FOCUS_LOST
+        )
         numberFieldPrompt.changeAlpha(0.5f)
 
-        val  nameFieldPrompt = TextPrompt("Write your student name here",
-            nameField, TextPrompt.Show.FOCUS_LOST)
+        val nameFieldPrompt = TextPrompt(
+            "Write your student name here",
+            nameField, TextPrompt.Show.FOCUS_LOST
+        )
         nameFieldPrompt.changeAlpha(0.5f)
 
         studentNumberField.add(numberField)
@@ -193,15 +197,17 @@ class LoginDialog {
 
         var index = 0
         for (number in studentNumberField) {
-            val addOrNot = number.text.trim().contains('a') && number.text.length== 9
+            val addOrNot = number.text.trim().contains('a') && number.text.length == 9
 
             if (addOrNot) {
                 studentsList.add(Users(number.text.trim(), studentNameField[index].text.trim()))
                 index++
             } else {
-                JOptionPane.showMessageDialog(null,
+                JOptionPane.showMessageDialog(
+                    null,
                     "User ${number.text.trim()} is not in the correct format, please try again",
-                    "Error in student number", JOptionPane.ERROR_MESSAGE)
+                    "Error in student number", JOptionPane.ERROR_MESSAGE
+                )
                 return true
             }
         }

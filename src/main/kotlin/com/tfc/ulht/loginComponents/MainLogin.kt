@@ -22,14 +22,9 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.tfc.ulht.CreateAuthorsFile
-import com.tfc.ulht.Users
 import com.tfc.ulht.ZipFolder
 import com.tfc.ulht.loginComponents.Authentication.Companion.alreadyLoggedIn
-import java.awt.Dimension
-import java.awt.FlowLayout
-import java.awt.GridLayout
 import java.io.File
-import javax.swing.JFrame
 import javax.swing.JOptionPane
 import javax.swing.JPanel
 
@@ -47,9 +42,11 @@ class MainLogin : AnAction() {
         if (!alreadyLoggedIn) {
             LoginDialog().assembleDialog(panel)
         } else {
-            JOptionPane.showMessageDialog(null, "You are already logged in",
+            JOptionPane.showMessageDialog(
+                null, "You are already logged in",
                 "Log in",
-                JOptionPane.INFORMATION_MESSAGE)
+                JOptionPane.INFORMATION_MESSAGE
+            )
         }
 
         val checkFile = File("$projectDirectory/AUTHORS.txt")

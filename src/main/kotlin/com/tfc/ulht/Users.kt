@@ -28,6 +28,4 @@ class Users(studentNumber: String, studentName: String) {
     }
 
 
-
-
 }
