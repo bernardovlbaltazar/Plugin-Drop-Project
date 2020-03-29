@@ -18,7 +18,6 @@ class CreateAuthorsFile : AnAction() {
 
 
         for (students in studentsList) {
-            println(students.toString())
             writer.write(students.toString())
             writer.newLine()
         }

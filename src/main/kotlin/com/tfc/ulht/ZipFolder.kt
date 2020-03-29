@@ -43,7 +43,6 @@ class ZipFolder : AnAction() {
          * Returns project path on system. Ex: C:/Users/yashj/IdeaProjects/Base de dados
          */
         val projectDirectory = e.project?.let { FileEditorManager.getInstance(it).project.basePath.toString() }
-        println(projectDirectory)
 
         var zipDir = "${projectDirectory}\\projeto.zip"
 

@@ -14,9 +14,6 @@ class CredentialsController {
         val file = File("$e\\up.txt")
         file.writeText("$username;$enc")
 
-        println("Original: $password")
-        println("Encrypted: $enc")
-
     }
 
 

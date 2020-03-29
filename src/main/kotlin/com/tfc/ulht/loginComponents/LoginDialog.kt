@@ -35,15 +35,15 @@ class LoginDialog {
     }
 
     private var GRIDY: Int = 3
-    val nameLabel = JLabel("Name:   ")
-    val usernameLabel = JLabel("Username:   ")
-    val passwordField = JPasswordField()
-    val passwordLabel = JLabel("Password:   ")
-    val addGroupStudents = JButton("Click here to add your group elements")
-    val studentNumberField = mutableListOf<JTextField>()
-    val studentNameField = mutableListOf<JTextField>()
-    val numberField = JTextField()
-    val nameField = JTextField()
+    private val nameLabel = JLabel("Name:   ")
+    private val usernameLabel = JLabel("Username:   ")
+    private val passwordField = JPasswordField()
+    private val passwordLabel = JLabel("Password:   ")
+    private val addGroupStudents = JButton("Click here to add your group elements")
+    private val studentNumberField = mutableListOf<JTextField>()
+    private val studentNameField = mutableListOf<JTextField>()
+    private val numberField = JTextField()
+    private val nameField = JTextField()
 
 
     fun assembleDialog(panel: JPanel) {
@@ -102,13 +102,12 @@ class LoginDialog {
         /**
          * Empty label after add students button
          */
-        val empty_label = JLabel()
-        panel.add(empty_label)
+        val emptyLabel = JLabel()
+        panel.add(emptyLabel)
 
 
         val actionListener = ActionListener { actionEvent ->
             if (countUsers < 2) {
-                println("Button pressed")
                 countUsers++
                 addMoreStudents(panel, gbc, gbPanel, countUsers)
             }
@@ -125,9 +124,6 @@ class LoginDialog {
 
         /**
          * Check credential
-         *
-         * @param response
-         * @return True if credential is valid
          * */
         if (option == 0) {
 
@@ -148,14 +144,8 @@ class LoginDialog {
                     null, "Login credentials incorrect!", "Error!",
                     JOptionPane.ERROR_MESSAGE
                 )
-            } else {
-                // Show error message in checkIfNumber() function
             }
-
-        } else {
-            println("Cancel!")
         }
-
     }
 
     private fun addMoreStudents(panel: JPanel, gbc: GridBagConstraints, gbPanel: GridBagLayout, count: Int): JPanel {

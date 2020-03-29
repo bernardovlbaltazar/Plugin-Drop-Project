@@ -37,22 +37,22 @@ class MainLogin : AnAction() {
 
         if (projectDirectory != null) {
             CredentialsController.e = projectDirectory
+
         }
 
         if (!alreadyLoggedIn) {
             LoginDialog().assembleDialog(panel)
+            val checkFile = File("$projectDirectory/AUTHORS.txt")
+
+            if (!checkFile.exists() && alreadyLoggedIn) {
+                CreateAuthorsFile().actionPerformed(e)
+            }
         } else {
             JOptionPane.showMessageDialog(
                 null, "You are already logged in",
                 "Log in",
                 JOptionPane.INFORMATION_MESSAGE
             )
-        }
-
-        val checkFile = File("$projectDirectory/AUTHORS.txt")
-
-        if (!checkFile.exists()) {
-            CreateAuthorsFile().actionPerformed(e)
         }
 
         val checkIfZipExists = File("$projectDirectory/projeto.zip")
