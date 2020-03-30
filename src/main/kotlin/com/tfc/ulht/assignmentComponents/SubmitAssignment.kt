@@ -53,8 +53,8 @@ class SubmitAssignment: AnAction() {
                 .build()
 
             val response: Response = Authentication.httpClient.newCall(request).execute()
+            response.close()
 
-            response.printToString()
         }
     }
 
