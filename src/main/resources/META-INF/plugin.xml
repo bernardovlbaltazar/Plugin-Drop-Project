@@ -27,7 +27,8 @@
                 <action id="ShowUserMessage" text="Click Here!" class="com.tfc.ulht.exampleDialogs.ShowUserWritedMessage"/>
             </group>
             <action class="com.tfc.ulht.AboutPlugin" id="AboutMe" text="About Me"/>
-            <action class="com.tfc.ulht.submissionComponents.ListSubmissions" id="ID" text="List Submissions"/>
+            <action class="com.tfc.ulht.assignmentComponents.ListAssignment" id="ID" text="List Submissions"/>
+            <action class="com.tfc.ulht.assignmentComponents.SubmitAssignment" id="SubmitAssignment" text="Submit Assignment"/>
         </group>
     </actions>
 </idea-plugin>

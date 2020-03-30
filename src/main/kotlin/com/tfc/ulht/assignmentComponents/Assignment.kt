@@ -16,11 +16,10 @@
  * limitations under the License.
  */
 
-package com.tfc.ulht.submissionComponents
+package com.tfc.ulht.assignmentComponents
 
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Submission(val id: Int, val assignmentId: String , val authorUserId: String){
+data class Assignment(val id: Int, val assignmentId: String, val authorUserId: String){
 }

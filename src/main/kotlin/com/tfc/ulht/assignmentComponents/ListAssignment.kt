@@ -1,5 +1,6 @@
-package com.tfc.ulht.submissionComponents
+package com.tfc.ulht.assignmentComponents
 
+import assignmentTable.ButtonColumn
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.squareup.moshi.JsonAdapter
@@ -9,19 +10,24 @@ import com.tfc.ulht.loginComponents.Authentication
 import okhttp3.Request
 import java.lang.reflect.Type
 import javax.swing.JOptionPane
-import kotlin.test.todo
 
 
-class ListSubmissions : AnAction() {
+class ListAssignment : AnAction() {
+
+    companion object {
+        var selectedAssignmentId: String = ""
+    }
+
     val type: Type = Types.newParameterizedType(
         List::class.java,
-        Submission::class.java
+        Assignment::class.java
     )
 
     private val REQUEST_URL = "http://localhost:8080/api/v1/assignmentList"
-    private var assignmentList = listOf<Submission>()
+    private var assignmentList = listOf<Assignment>()
     private val moshi = Moshi.Builder().build()
-    private val submissionJsonAdapter: JsonAdapter<List<Submission>> = moshi.adapter(type)
+    private val assignmentJsonAdapter: JsonAdapter<List<Assignment>> = moshi.adapter(type)
+
 
     override fun actionPerformed(e: AnActionEvent) {
 
@@ -31,7 +37,7 @@ class ListSubmissions : AnAction() {
                 .build()
 
             Authentication.httpClient.newCall(request).execute().use { response ->
-                assignmentList = submissionJsonAdapter.fromJson(response.body()!!.source())!!
+                assignmentList = assignmentJsonAdapter.fromJson(response.body()!!.source())!!
             }
 
             showSubmissionDialog()
@@ -43,6 +49,7 @@ class ListSubmissions : AnAction() {
 
     private fun showSubmissionDialog() {
         // TODO: Create submissions dialog
+        ButtonColumn(assignmentList)
     }
 
 
