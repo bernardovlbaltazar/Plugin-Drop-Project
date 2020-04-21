@@ -16,7 +16,14 @@
  * limitations under the License.
  */
 
-package com.tfc.ulht.assignmentComponents
+package data
 
-class ShowAssignmentInfo {
-}
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+data class Assignment(
+    val id: String,
+    val language: String,
+    val date: String?,
+    val html: String
+)

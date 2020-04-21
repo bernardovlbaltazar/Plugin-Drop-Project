@@ -1,12 +1,13 @@
 package com.tfc.ulht.assignmentComponents
 
-import assignmentTable.ButtonColumn
+import assignmentTable.AssignmentTableColumn
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.tfc.ulht.loginComponents.Authentication
+import data.Assignment
 import okhttp3.Request
 import java.lang.reflect.Type
 import javax.swing.JOptionPane
@@ -38,18 +39,18 @@ class ListAssignment : AnAction() {
 
             Authentication.httpClient.newCall(request).execute().use { response ->
                 assignmentList = assignmentJsonAdapter.fromJson(response.body()!!.source())!!
-            }
 
-            showSubmissionDialog()
+            }
+            showAssingmentTable()
 
         } else {
             JOptionPane.showMessageDialog(null, "You need to login first!", "Login First", JOptionPane.WARNING_MESSAGE)
         }
     }
 
-    private fun showSubmissionDialog() {
+    private fun showAssingmentTable() {
         // TODO: Create submissions dialog
-        ButtonColumn(assignmentList)
+        AssignmentTableColumn(assignmentList)
     }
 
 

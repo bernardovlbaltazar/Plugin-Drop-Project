@@ -27,10 +27,6 @@ import java.io.File
 
 class OnStartup : StartupActivity {
 
-    companion object {
-        val pass = "password".toCharArray()
-    }
-
     override fun runActivity(project: Project) {
 
         val userPassFile = File("${project.basePath}\\up.txt")

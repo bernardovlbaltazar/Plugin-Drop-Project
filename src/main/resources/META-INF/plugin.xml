@@ -22,13 +22,9 @@
         <group id="PluginDrop.MainClass" text="Drop Project" description="Options for drop project">
             <add-to-group group-id="MainMenu" anchor="last"/>
             <action class="com.tfc.ulht.loginComponents.MainLogin" id="OpenMenuAndShowOptions" text="Log In"/>
-            <action class="com.tfc.ulht.exampleDialogs.SearchWeb" id="SearchTheWeb" text="Search on the Web"/>
-            <group id="InputDialog" text="Input" popup="true">
-                <action id="ShowUserMessage" text="Click Here!" class="com.tfc.ulht.exampleDialogs.ShowUserWritedMessage"/>
-            </group>
-            <action class="com.tfc.ulht.AboutPlugin" id="AboutMe" text="About Me"/>
-            <action class="com.tfc.ulht.assignmentComponents.ListAssignment" id="ID" text="List Submissions"/>
+            <action class="com.tfc.ulht.assignmentComponents.ListAssignment" id="ID" text="List Assignments"/>
             <action class="com.tfc.ulht.assignmentComponents.SubmitAssignment" id="SubmitAssignment" text="Submit Assignment"/>
+            <action class="com.tfc.ulht.AboutPlugin" id="AboutMe" text="About Me"/>
         </group>
     </actions>
 </idea-plugin>

@@ -25,7 +25,7 @@ import javax.swing.UIManager
 import javax.swing.table.TableCellRenderer
 
 
-class ButtonRenderer(private val labelName: String) : JButton(), TableCellRenderer {
+class AssignmentTableButtonRenderer(private val labelName: String) : JButton(), TableCellRenderer {
 
     init {
         isOpaque = true

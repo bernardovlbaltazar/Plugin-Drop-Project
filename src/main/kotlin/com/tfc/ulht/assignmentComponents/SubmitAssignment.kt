@@ -21,27 +21,40 @@ package com.tfc.ulht.assignmentComponents
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.fileEditor.FileEditorManager
-import com.jetbrains.rd.util.string.printToString
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import com.squareup.moshi.Moshi
 import com.tfc.ulht.loginComponents.Authentication
-import okhttp3.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.Request
+import okhttp3.RequestBody
 import java.io.File
+import java.net.URI
+import javax.swing.JOptionPane
+import javax.swing.JPanel
 
 
-class SubmitAssignment: AnAction() {
+class SubmitAssignment : AnAction() {
 
     override fun actionPerformed(e: AnActionEvent) {
-        // Before trying to submit project, check if an assignment has been choosen
-        if (!ListAssignment.selectedAssignmentId.isEmpty() && !Authentication.alreadyLoggedIn) {
 
+        if (!Authentication.alreadyLoggedIn) {
+            // If user is has not logged in, show an error message
+            JOptionPane.showMessageDialog(null, "You need to login before submiting an assignment", "Submit", JOptionPane.ERROR_MESSAGE)
+
+        } else if (ListAssignment.selectedAssignmentId.isEmpty()) {
+            // Before trying to submit project, check if an assignment has been choosen
+            JOptionPane.showMessageDialog(null, "You need to choose an assignment first", "Submit", JOptionPane.INFORMATION_MESSAGE)
         } else {
             // If assignment has been choosen, upload zip file
             val projectDirectory = e.project?.let { FileEditorManager.getInstance(it).project.basePath.toString() }
             val body: RequestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart(
-                    "file", "/${projectDirectory}\\projeto.zip",
+                    "file", "projeto.zip",
                     RequestBody.create(
                         MediaType.parse("application/octet-stream"),
-                        File("/${projectDirectory}\\projeto.zip")
+                        File("${projectDirectory}\\projeto.zip")
                     )
                 )
                 .addFormDataPart("assignmentId", ListAssignment.selectedAssignmentId)
@@ -52,29 +65,21 @@ class SubmitAssignment: AnAction() {
                 .method("POST", body)
                 .build()
 
-            val response: Response = Authentication.httpClient.newCall(request).execute()
-            response.close()
+            val moshi = Moshi.Builder().build()
+            val submissionJsonAdapter = moshi.adapter(SubmissionId::class.java)
 
+            var response = Authentication.httpClient.newCall(request).execute()
+
+            val submission = submissionJsonAdapter.fromJson(response.body()!!.source())!!
+
+            /*JPanel myPanel;
+            myPanel.add(new JBCefBrowser(“https://www.jetbrains.com”).getComponent());*/
+
+            val desktop = java.awt.Desktop.getDesktop()
+            desktop.browse(URI("http://localhost:8080/buildReport/${submission.submissionNumber}"))
         }
     }
-
-    /*var client = OkHttpClient().newBuilder()
-        .build()
-    var mediaType: MediaType = MediaType.parse("text/plain")
-    var body: RequestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
-        .addFormDataPart(
-            "file", "/C:/Users/yashj/IdeaProjects/Base de dados/projeto.zip",
-            RequestBody.create(
-                MediaType.parse("application/octet-stream"),
-                File("/C:/Users/yashj/IdeaProjects/Base de dados/projeto.zip")
-            )
-        )
-        .addFormDataPart("assignmentId", "sampleJavaProject")
-        .build()
-    var request: Request = Builder()
-        .url("http://localhost:8080/upload/")
-        .method("POST", body)
-        .addHeader("Cookie", "JSESSIONID=84F42716FBDDD77C0CC34EFEE4C285BB")
-        .build()
-    var response: Response = client.newCall(request).execute()*/
 }
+
+@JsonClass(generateAdapter = true)
+data class SubmissionId(@Json(name = "submissionId") val submissionNumber: Int)
