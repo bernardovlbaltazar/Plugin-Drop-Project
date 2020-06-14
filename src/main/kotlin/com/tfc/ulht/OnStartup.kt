@@ -20,9 +20,12 @@ package com.tfc.ulht
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.StartupActivity
+import com.intellij.openapi.ui.Messages
 import com.tfc.ulht.loginComponents.Authentication
 import com.tfc.ulht.loginComponents.CredentialsController
 import java.io.File
+import javax.swing.Icon
+import javax.swing.JOptionPane
 
 
 class OnStartup : StartupActivity {
@@ -40,8 +43,9 @@ class OnStartup : StartupActivity {
             val username = data[0]
             val decryptedPassword = String(CredentialsController().decrypt(data[1].toByteArray()))
 
-            Authentication().checkCredentials(username, decryptedPassword, true)
-            Authentication.alreadyLoggedIn = true
+            if (Authentication().checkCredentials(username, decryptedPassword, true)) {
+                Authentication.alreadyLoggedIn = true
+            }
         }
 
     }

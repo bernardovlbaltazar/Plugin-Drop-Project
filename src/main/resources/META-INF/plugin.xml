@@ -12,6 +12,7 @@
     <!-- uncomment to enable plugin in all products
     <depends>com.intellij.modules.lang</depends>
     -->
+    <idea-version since-build="191" until-build="201.*"/>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
@@ -24,6 +25,7 @@
             <action class="com.tfc.ulht.loginComponents.MainLogin" id="OpenMenuAndShowOptions" text="Log In"/>
             <action class="com.tfc.ulht.assignmentComponents.ListAssignment" id="ID" text="List Assignments"/>
             <action class="com.tfc.ulht.assignmentComponents.SubmitAssignment" id="SubmitAssignment" text="Submit Assignment"/>
+            <action class="com.tfc.ulht.loginComponents.Logout" id="Logout" text="Logout"/>
             <action class="com.tfc.ulht.AboutPlugin" id="AboutMe" text="About Me"/>
         </group>
     </actions>

@@ -138,7 +138,6 @@ class LoginDialog {
 
             if (response && !checkIfCorrectNumber()) {
                 JOptionPane.showMessageDialog(null, "Login Successful")
-                Authentication.alreadyLoggedIn = true
             } else if (!response) {
                 JOptionPane.showMessageDialog(
                     null, "Login credentials incorrect!", "Error!",

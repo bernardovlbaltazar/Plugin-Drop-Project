@@ -19,7 +19,10 @@
 package com.tfc.ulht.loginComponents
 
 import okhttp3.*
+import org.jetbrains.io.response
 import java.io.IOException
+import java.util.concurrent.TimeUnit
+import javax.swing.JOptionPane
 
 class Authentication {
 
@@ -31,7 +34,6 @@ class Authentication {
     var serverResponse: Boolean = false
 
     fun checkCredentials(username: String, password: String, firstRun: Boolean = false): Boolean {
-
 
         httpClient = OkHttpClient.Builder()
             .authenticator(object : Authenticator {
@@ -56,8 +58,26 @@ class Authentication {
             serverResponse = response.isSuccessful
         }
 
+        /*httpClient.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                //serverResponse = false
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                response.use {
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                    serverResponse = response.isSuccessful
+                }
+            }
+        })*/
+
+        println(serverResponse)
+
         if (serverResponse && !firstRun) {
             CredentialsController().encryptPassword(username, password)
+            alreadyLoggedIn = true
         }
 
         return serverResponse

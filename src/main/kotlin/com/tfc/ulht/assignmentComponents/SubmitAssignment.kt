@@ -18,24 +18,27 @@
 
 package com.tfc.ulht.assignmentComponents
 
+import com.google.gson.JsonObject
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.fileEditor.FileEditorManager
+import com.intellij.openapi.ui.Messages
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
+import com.tfc.ulht.ZipFolder
 import com.tfc.ulht.loginComponents.Authentication
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.Request
 import okhttp3.RequestBody
+import org.jetbrains.io.response
 import java.io.File
-import java.net.URI
 import javax.swing.JOptionPane
-import javax.swing.JPanel
-
 
 class SubmitAssignment : AnAction() {
+
+    private val REQUEST_URL = "http://localhost:8080/upload"
 
     override fun actionPerformed(e: AnActionEvent) {
 
@@ -48,6 +51,7 @@ class SubmitAssignment : AnAction() {
             JOptionPane.showMessageDialog(null, "You need to choose an assignment first", "Submit", JOptionPane.INFORMATION_MESSAGE)
         } else {
             // If assignment has been choosen, upload zip file
+            ZipFolder().actionPerformed(e)
             val projectDirectory = e.project?.let { FileEditorManager.getInstance(it).project.basePath.toString() }
             val body: RequestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart(
@@ -61,25 +65,32 @@ class SubmitAssignment : AnAction() {
                 .build()
 
             val request: Request = Request.Builder()
-                .url("http://localhost:8080/upload/")
+                .url(REQUEST_URL)
                 .method("POST", body)
                 .build()
 
             val moshi = Moshi.Builder().build()
             val submissionJsonAdapter = moshi.adapter(SubmissionId::class.java)
 
-            var response = Authentication.httpClient.newCall(request).execute()
+            Authentication.httpClient.newCall(request).execute().use { response ->
+                if (response.isSuccessful) {
+                    if (response.code() == 200) {
+                        val submission = submissionJsonAdapter.fromJson(response.body()!!.source())!!
+                    }
+                } else if (!response.isSuccessful && response.code() == 500) {
+                    val errorJsonAdapter = moshi.adapter(ErrorMessage::class.java)
+                    val errorMessage = errorJsonAdapter.fromJson(response.body()!!.source())!!
+                    Messages.showMessageDialog(errorMessage.error, "Submission", Messages.getErrorIcon())
+                }
+            }
 
-            val submission = submissionJsonAdapter.fromJson(response.body()!!.source())!!
 
-            /*JPanel myPanel;
-            myPanel.add(new JBCefBrowser(“https://www.jetbrains.com”).getComponent());*/
-
-            val desktop = java.awt.Desktop.getDesktop()
-            desktop.browse(URI("http://localhost:8080/buildReport/${submission.submissionNumber}"))
         }
     }
 }
 
 @JsonClass(generateAdapter = true)
 data class SubmissionId(@Json(name = "submissionId") val submissionNumber: Int)
+
+@JsonClass(generateAdapter = true)
+data class ErrorMessage(val error: String)
