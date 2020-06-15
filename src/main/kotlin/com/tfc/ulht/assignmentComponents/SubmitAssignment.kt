@@ -38,7 +38,7 @@ import javax.swing.JOptionPane
 
 class SubmitAssignment : AnAction() {
 
-    private val REQUEST_URL = "http://localhost:8080/upload"
+    private val REQUEST_URL = "https://drop-project-fork.herokuapp.com/upload"
 
     override fun actionPerformed(e: AnActionEvent) {
 

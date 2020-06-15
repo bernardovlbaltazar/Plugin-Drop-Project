@@ -18,11 +18,9 @@
 
 package com.tfc.ulht.loginComponents
 
+import com.jetbrains.rd.util.use
 import okhttp3.*
-import org.jetbrains.io.response
 import java.io.IOException
-import java.util.concurrent.TimeUnit
-import javax.swing.JOptionPane
 
 class Authentication {
 
@@ -51,7 +49,7 @@ class Authentication {
             .build()
 
         val request = Request.Builder()
-            .url("http://localhost:8080/")
+            .url("https://drop-project-fork.herokuapp.com/")
             .build()
 
         httpClient.newCall(request).execute().use { response ->

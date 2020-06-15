@@ -3,12 +3,9 @@ package com.tfc.ulht
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.fileEditor.FileEditorManager
-import java.io.FileOutputStream
-import java.io.IOException
-import java.nio.file.*
-import java.nio.file.attribute.BasicFileAttributes
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
+import net.lingala.zip4j.ZipFile
+import java.io.File
+import java.util.*
 
 
 /*-
@@ -37,56 +34,27 @@ class ZipFolder : AnAction() {
 
     override fun actionPerformed(e: AnActionEvent) {
 
-        // TODO: Melhor apagR
-
         /**
          * Returns project path on system. Ex: C:/Users/yashj/IdeaProjects/Base de dados
          */
         val projectDirectory = e.project?.let { FileEditorManager.getInstance(it).project.basePath.toString() }
 
-        var zipDir = "${projectDirectory}\\projeto.zip"
 
-        zipFolderStructure(projectDirectory, zipDir)
+        /***
+         * https://github.com/srikanth-lingala/zip4j
+         *
+         * Library reduces boilerplate when creating Zip file and Drop Project
+         * is only accepting a zip file created using this library
+         */
+        // Add AUTHORS.txt to a new zip
+        ZipFile("$projectDirectory\\projeto.zip")
+            .addFile(File("$projectDirectory\\AUTHORS.txt"))
 
 
+        // Add the "src" folder on the existing zip
+        ZipFile("$projectDirectory\\projeto.zip")
+            .addFolder(File("$projectDirectory\\src"))
     }
 
-    private fun zipFolderStructure(projectDirectory: String?, zipDir: String) {
-        try {
-            FileOutputStream(zipDir).use { fos ->
-                ZipOutputStream(fos).use { zos ->
-                    val sourcePath = Paths.get(projectDirectory)
-                    Files.walkFileTree(sourcePath, object : SimpleFileVisitor<Path>() {
-                        @Throws(IOException::class)
-                        override
-                        fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-                            if (sourcePath != dir && dir.toString().startsWith("$sourcePath\\src")) {
-                                zos.putNextEntry(ZipEntry(sourcePath.relativize(dir).toString() + "/"))
-                                zos.closeEntry()
-                            }
-                            return FileVisitResult.CONTINUE
-                        }
 
-                        @Throws(IOException::class)
-                        override
-                        fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                            if (sourcePath.relativize(file).toString() == "AUTHORS.txt"
-                                || file.toString().startsWith("$sourcePath\\src")
-                            ) {
-                                zos.putNextEntry(ZipEntry(sourcePath.relativize(file).toString()))
-                                Files.copy(file, zos)
-                                zos.closeEntry()
-                                return FileVisitResult.CONTINUE
-                            }
-
-                            return FileVisitResult.CONTINUE
-                        }
-                    })
-                }
-            }
-
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-    }
 }

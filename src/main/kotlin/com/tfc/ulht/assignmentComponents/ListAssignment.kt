@@ -24,7 +24,7 @@ class ListAssignment : AnAction() {
         Assignment::class.java
     )
 
-    private val REQUEST_URL = "http://localhost:8080/api/v1/assignmentList"
+    private val REQUEST_URL = "https://drop-project-fork.herokuapp.com/api/v1/assignmentList"
     private var assignmentList = listOf<Assignment>()
     private val moshi = Moshi.Builder().build()
     private val assignmentJsonAdapter: JsonAdapter<List<Assignment>> = moshi.adapter(type)

@@ -38,7 +38,7 @@ class ListSubmissions(val assignmentId: String) {
         Submission::class.java
     )
 
-    private val REQUEST_URL = "http://localhost:8080/api/v1/submissionsList"
+    private val REQUEST_URL = "https://drop-project-fork.herokuapp.com/api/v1/submissionsList"
     private var submissionList = listOf<Submission>()
     private val moshi = Moshi.Builder().build()
     private val submissionJsonAdapter: JsonAdapter<List<Submission>> = moshi.adapter(type)

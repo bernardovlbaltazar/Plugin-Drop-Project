@@ -19,6 +19,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation "com.squareup.moshi:moshi:1.9.2"
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.9.2'
+    compile group: 'net.lingala.zip4j', name: 'zip4j', version: '2.6.1'
 
 }
 
