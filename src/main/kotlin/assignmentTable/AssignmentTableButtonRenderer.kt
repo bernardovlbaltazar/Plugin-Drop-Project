@@ -19,11 +19,9 @@
 package assignmentTable
 
 import com.tfc.ulht.Globals
-import sun.plugin2.util.ColorUtil
 import java.awt.Color
 import java.awt.Component
 import javax.swing.JButton
-import javax.swing.JLabel
 import javax.swing.JTable
 import javax.swing.table.TableCellRenderer
 
