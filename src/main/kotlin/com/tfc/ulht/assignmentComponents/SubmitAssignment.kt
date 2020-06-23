@@ -18,7 +18,6 @@
 
 package com.tfc.ulht.assignmentComponents
 
-import com.google.gson.JsonObject
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.fileEditor.FileEditorManager
@@ -26,19 +25,29 @@ import com.intellij.openapi.ui.Messages
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
+import com.tfc.ulht.Globals
+import com.tfc.ulht.SubmissionListener
 import com.tfc.ulht.ZipFolder
 import com.tfc.ulht.loginComponents.Authentication
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.Request
 import okhttp3.RequestBody
-import org.jetbrains.io.response
 import java.io.File
+import java.util.*
 import javax.swing.JOptionPane
+import kotlin.collections.ArrayList
+
 
 class SubmitAssignment : AnAction() {
 
-    private val REQUEST_URL = "https://drop-project-fork.herokuapp.com/upload"
+    private val REQUEST_URL = "${Globals.REQUEST_URL}/upload"
+    private val listeners: MutableList<SubmissionListener> = ArrayList()
+
+    fun addListener(toAdd: SubmissionListener) {
+        listeners.add(toAdd)
+    }
+
 
     override fun actionPerformed(e: AnActionEvent) {
 
@@ -46,7 +55,7 @@ class SubmitAssignment : AnAction() {
             // If user is has not logged in, show an error message
             JOptionPane.showMessageDialog(null, "You need to login before submiting an assignment", "Submit", JOptionPane.ERROR_MESSAGE)
 
-        } else if (ListAssignment.selectedAssignmentId.isEmpty()) {
+        } else if (Globals.selectedAssignmentID.isEmpty()) {
             // Before trying to submit project, check if an assignment has been choosen
             JOptionPane.showMessageDialog(null, "You need to choose an assignment first", "Submit", JOptionPane.INFORMATION_MESSAGE)
         } else {
@@ -61,7 +70,7 @@ class SubmitAssignment : AnAction() {
                         File("${projectDirectory}\\projeto.zip")
                     )
                 )
-                .addFormDataPart("assignmentId", ListAssignment.selectedAssignmentId)
+                .addFormDataPart("assignmentId", Globals.selectedAssignmentID)
                 .build()
 
             val request: Request = Request.Builder()
@@ -83,7 +92,6 @@ class SubmitAssignment : AnAction() {
                     Messages.showMessageDialog(errorMessage.error, "Submission", Messages.getErrorIcon())
                 }
             }
-
 
         }
     }

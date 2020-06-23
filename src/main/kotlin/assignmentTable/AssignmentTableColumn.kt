@@ -19,9 +19,11 @@
 package assignmentTable
 
 import data.Assignment
+import org.apache.batik.svggen.font.table.Table.head
 import java.awt.BorderLayout
 import java.awt.Dimension
 import javax.swing.*
+import javax.swing.table.DefaultTableModel
 
 class AssignmentTableColumn(assignmentList: List<Assignment>) : JFrame() {
 
@@ -34,8 +36,7 @@ class AssignmentTableColumn(assignmentList: List<Assignment>) : JFrame() {
     private val selectAssignmentButton: Int = 5
 
     init {
-        var iterator = 0
-        for (assignment in assignmentList) {
+        for ((iterator, assignment) in assignmentList.withIndex()) {
             data[iterator][0] = assignment.id
             data[iterator][1] = assignment.language
 
@@ -46,10 +47,14 @@ class AssignmentTableColumn(assignmentList: List<Assignment>) : JFrame() {
             }
 
             data[iterator][3] = assignment.html
-            iterator++
         }
 
-        val table = JTable(data, headers)
+        val table = object : JTable(data, headers) {
+            override fun isCellEditable(row: Int, col: Int): Boolean {
+                return col in 3..5
+            }
+        }
+
         table.rowHeight = 30
         table.removeColumn(table.columnModel.getColumn(3))
 

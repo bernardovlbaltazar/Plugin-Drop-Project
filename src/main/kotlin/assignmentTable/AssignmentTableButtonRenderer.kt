@@ -18,10 +18,13 @@
 
 package assignmentTable
 
+import com.tfc.ulht.Globals
+import sun.plugin2.util.ColorUtil
+import java.awt.Color
 import java.awt.Component
 import javax.swing.JButton
+import javax.swing.JLabel
 import javax.swing.JTable
-import javax.swing.UIManager
 import javax.swing.table.TableCellRenderer
 
 
@@ -35,12 +38,20 @@ class AssignmentTableButtonRenderer(private val labelName: String) : JButton(), 
         table: JTable, obj: Any,
         selected: Boolean, focused: Boolean, row: Int, col: Int
     ): Component {
-        if (isSelected) {
-            foreground = table.selectionForeground;
-            background = table.selectionBackground;
+        /*if (isSelected) {
+            foreground = Color.BLACK
+            background = Color.GRAY
         } else {
-            foreground = table.foreground;
-            background = UIManager.getColor("Button.background");
+            foreground = Color.BLACK
+            background = Color.WHITE
+        }*/
+
+        if (isSelected && row == Globals.choosenRow && col == Globals.choosenColumn) {
+            background = Color.GREEN
+            foreground = Color.RED
+        } else {
+            foreground = Color.BLACK
+            background = Color.WHITE
         }
 
         text = labelName

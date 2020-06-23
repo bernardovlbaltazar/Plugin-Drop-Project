@@ -1,5 +1,6 @@
 package assignmentTable
 
+import com.tfc.ulht.Globals
 import com.tfc.ulht.assignmentComponents.ListAssignment
 import com.tfc.ulht.submissionComponents.ListSubmissions
 import java.awt.Component
@@ -22,6 +23,8 @@ internal class AssignmentTableButtonEditor(
     private var assignmentId: String = ""
     private var assignmentDetails: String = ""
 
+    private var table: JTable? = null
+
     init {
         button.isOpaque = true
         button.addActionListener { fireEditingStopped() }
@@ -43,6 +46,8 @@ internal class AssignmentTableButtonEditor(
         this.assignmentDetails = table.model.getValueAt(row, 3).toString()
         this.row = row
         this.column = col
+
+        this.table = table
 
         /*
         println("Row: $row : Column: $col") // GET LOCATION OF
@@ -77,9 +82,11 @@ internal class AssignmentTableButtonEditor(
 
 
             } else if (column == 5) { // SELECT ASSIGNMENT
-                ListAssignment.selectedAssignmentId = assignmentId
+                Globals.selectedAssignmentID = assignmentId
                 JOptionPane.showMessageDialog(null, "The assignment with ID: $assignmentId was selected")
                 //frame.dispatchEvent(WindowEvent(frame, WindowEvent.WINDOW_CLOSING))
+                /*Globals.choosenColumn = column
+                Globals.choosenRow = row*/
 
             }
         }

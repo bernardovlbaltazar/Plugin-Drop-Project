@@ -22,6 +22,7 @@ import assignmentTable.SubmissionTableColumn
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import com.tfc.ulht.Globals
 import com.tfc.ulht.loginComponents.Authentication
 import java.lang.reflect.Type
 import data.Submission
@@ -38,7 +39,7 @@ class ListSubmissions(val assignmentId: String) {
         Submission::class.java
     )
 
-    private val REQUEST_URL = "https://drop-project-fork.herokuapp.com/api/v1/submissionsList"
+    private val REQUEST_URL = "${Globals.REQUEST_URL}/api/v1/submissionsList"
     private var submissionList = listOf<Submission>()
     private val moshi = Moshi.Builder().build()
     private val submissionJsonAdapter: JsonAdapter<List<Submission>> = moshi.adapter(type)

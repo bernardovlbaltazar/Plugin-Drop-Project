@@ -19,6 +19,7 @@
 package com.tfc.ulht.loginComponents
 
 import com.jetbrains.rd.util.use
+import com.tfc.ulht.Globals
 import okhttp3.*
 import java.io.IOException
 
@@ -49,7 +50,7 @@ class Authentication {
             .build()
 
         val request = Request.Builder()
-            .url("https://drop-project-fork.herokuapp.com/")
+            .url(Globals.REQUEST_URL)
             .build()
 
         httpClient.newCall(request).execute().use { response ->

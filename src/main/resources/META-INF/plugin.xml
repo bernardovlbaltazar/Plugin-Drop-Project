@@ -17,6 +17,8 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <postStartupActivity implementation="com.tfc.ulht.OnStartup"/>
+        <statusBarWidgetFactory implementation="com.tfc.ulht.statusBarWidget.PluginStatusWidgetFactory"
+                                order="after notificationsWidget"/>
     </extensions>
 
     <actions>
@@ -24,7 +26,8 @@
             <add-to-group group-id="MainMenu" anchor="last"/>
             <action class="com.tfc.ulht.loginComponents.MainLogin" id="OpenMenuAndShowOptions" text="Log In"/>
             <action class="com.tfc.ulht.assignmentComponents.ListAssignment" id="ID" text="List Assignments"/>
-            <action class="com.tfc.ulht.assignmentComponents.SubmitAssignment" id="SubmitAssignment" text="Submit Assignment"/>
+            <action class="com.tfc.ulht.assignmentComponents.SubmitAssignment" id="SubmitAssignment"
+                    text="Submit Assignment"/>
             <action class="com.tfc.ulht.loginComponents.Logout" id="Logout" text="Logout"/>
             <action class="com.tfc.ulht.AboutPlugin" id="AboutMe" text="About Me"/>
         </group>
