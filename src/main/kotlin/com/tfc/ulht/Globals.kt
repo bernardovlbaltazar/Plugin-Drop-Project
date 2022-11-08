@@ -23,7 +23,9 @@ import com.tfc.ulht.statusBarWidget.PluginStatusWidget
 class Globals {
 
     companion object {
-        val REQUEST_URL = "https://drop-project-fork.herokuapp.com"
+        //val REQUEST_URL = "https://drop-project-fork.herokuapp.com"
+        val REQUEST_URL = "http://localhost:8080"
+        //val REQUEST_URL = "https://deisi.ulusofona.pt/drop-project"
         val PLUGIN_ID = PluginStatusWidget::class.java.name
 
         var choosenRow: Int = 0

@@ -28,7 +28,7 @@ import javax.swing.table.DefaultTableModel
 class AssignmentTableColumn(assignmentList: List<Assignment>) : JFrame() {
 
     private var data = Array(assignmentList.size) { Array(8) { "" } }
-    private var headers = arrayOf("Assignment ID", "Assignment Language", "Due Date", "", "", "", "")
+    private var headers = arrayOf("Assignment Title", "Assignment Language", "Due Date", "", "", "", "")
     private val panel = JPanel(BorderLayout())
     private val frame = JFrame("Available Assignments")
     private val listSubmissionsButton: Int = 3
@@ -37,16 +37,17 @@ class AssignmentTableColumn(assignmentList: List<Assignment>) : JFrame() {
 
     init {
         for ((iterator, assignment) in assignmentList.withIndex()) {
-            data[iterator][0] = assignment.id
+            data[iterator][0] = assignment.name  //yash: id
             data[iterator][1] = assignment.language
+            data[iterator][7] = assignment.id //bernas try
 
-            if (!assignment.date.isNullOrEmpty()) {
-                data[iterator][2] = assignment.date.toString()
+            if (!assignment.dueDate.isNullOrEmpty()) {
+                data[iterator][2] = assignment.dueDate.toString()
             } else {
                 data[iterator][2] = "No due date"
             }
 
-            data[iterator][3] = assignment.html
+            data[iterator][3] = assignment.packageName // .html : Yash
         }
 
         val table = object : JTable(data, headers) {

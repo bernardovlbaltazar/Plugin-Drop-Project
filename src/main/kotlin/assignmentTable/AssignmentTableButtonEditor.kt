@@ -42,7 +42,7 @@ internal class AssignmentTableButtonEditor(
             button.background = table.background
         }
 
-        this.assignmentId = table.model.getValueAt(row, 0).toString()
+        this.assignmentId = table.model.getValueAt(row, 7).toString() //bernas try
         this.assignmentDetails = table.model.getValueAt(row, 3).toString()
         this.row = row
         this.column = col

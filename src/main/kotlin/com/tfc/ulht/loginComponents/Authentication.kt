@@ -22,6 +22,12 @@ import com.jetbrains.rd.util.use
 import com.tfc.ulht.Globals
 import okhttp3.*
 import java.io.IOException
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 class Authentication {
 
@@ -31,7 +37,34 @@ class Authentication {
     }
 
     var serverResponse: Boolean = false
+    private val REQUEST_URL = "${Globals.REQUEST_URL}/api/student/assignments/current"
 
+    fun authenticate(username: String, token: String): Boolean {
+        httpClient = OkHttpClient.Builder()
+            .authenticator(object : Authenticator {
+                @Throws(IOException::class)
+                override fun authenticate(route: Route?, response: Response): Request? {
+                    if (response.request().header("Authorization") != null) {
+                        return null // Give up, we've already attempted to authenticate.
+                    }
+
+                    return response.request().newBuilder()
+                        .header("Authorization", Credentials.basic(username, token))
+                        .build()
+                }
+            })
+            .ignoreAllSSLErrors()
+            .build()
+        val request = Request.Builder()
+            .url(/*Globals.*/REQUEST_URL)
+            .build()
+
+        httpClient.newCall(request).execute().use { response ->
+            alreadyLoggedIn = response.isSuccessful
+        }
+
+        return alreadyLoggedIn
+    }
     fun checkCredentials(username: String, password: String, firstRun: Boolean = false): Boolean {
 
         httpClient = OkHttpClient.Builder()
@@ -48,7 +81,6 @@ class Authentication {
                 }
             })
             .build()
-
         val request = Request.Builder()
             .url(Globals.REQUEST_URL)
             .build()
@@ -56,21 +88,6 @@ class Authentication {
         httpClient.newCall(request).execute().use { response ->
             serverResponse = response.isSuccessful
         }
-
-        /*httpClient.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
-                //serverResponse = false
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                response.use {
-                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
-
-                    serverResponse = response.isSuccessful
-                }
-            }
-        })*/
 
         println(serverResponse)
 
@@ -82,4 +99,21 @@ class Authentication {
         return serverResponse
     }
 
+
+    fun OkHttpClient.Builder.ignoreAllSSLErrors(): OkHttpClient.Builder {
+        val naiveTrustManager = object : X509TrustManager {
+            override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
+            override fun checkClientTrusted(certs: Array<X509Certificate>, authType: String) = Unit
+            override fun checkServerTrusted(certs: Array<X509Certificate>, authType: String) = Unit
+        }
+
+        val insecureSocketFactory = SSLContext.getInstance("TLSv1.2").apply {
+            val trustAllCerts = arrayOf<TrustManager>(naiveTrustManager)
+            init(null, trustAllCerts, SecureRandom())
+        }.socketFactory
+
+        sslSocketFactory(insecureSocketFactory, naiveTrustManager)
+        hostnameVerifier(HostnameVerifier { _, _ -> true })
+        return this
+    }
 }

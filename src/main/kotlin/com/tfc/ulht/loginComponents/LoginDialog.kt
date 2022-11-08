@@ -127,18 +127,20 @@ class LoginDialog {
          * */
         if (option == 0) {
 
-
-            val response = Authentication().checkCredentials(
+            val response = Authentication()
+                .authenticate(studentNumberField[0].text.trim(),
+                String(passwordField.password))
+           /* val response = Authentication().checkCredentials(
                 studentNumberField[0].text.trim(),
                 String(passwordField.password)
-            )
+            )*/
 
             UIManager.put("OptionPane.minimumSize", Dimension(200, 100))
 
 
-            if (response && !checkIfCorrectNumber()) {
+            if (response /*&& !checkIfCorrectNumber()*/) {
                 JOptionPane.showMessageDialog(null, "Login Successful")
-            } else if (!response) {
+            } else /*if (!response)*/ {
                 JOptionPane.showMessageDialog(
                     null, "Login credentials incorrect!", "Error!",
                     JOptionPane.ERROR_MESSAGE
@@ -187,14 +189,14 @@ class LoginDialog {
         var index = 0
         for (number in studentNumberField) {
             val addOrNot = number.text.trim().contains('a') && number.text.length == 9
-
+            println(passwordField.password.toString().trim())
             if (addOrNot) {
                 studentsList.add(Users(number.text.trim(), studentNameField[index].text.trim()))
                 index++
             } else {
                 JOptionPane.showMessageDialog(
                     null,
-                    "User ${number.text.trim()} is not in the correct format, please try again",
+                    "Warning! User ${number.text.trim()} is not in the correct format",
                     "Error in student number", JOptionPane.ERROR_MESSAGE
                 )
                 return true

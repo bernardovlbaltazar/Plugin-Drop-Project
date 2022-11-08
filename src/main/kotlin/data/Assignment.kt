@@ -23,7 +23,10 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class Assignment(
     val id: String,
+    val name: String,
+    val packageName: String,
+    val dueDate: String?,
+    val submissionMethod: String,
     val language: String,
-    val date: String?,
-    val html: String
+    val active: Boolean
 )

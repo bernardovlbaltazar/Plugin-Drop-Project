@@ -43,9 +43,9 @@ class OnStartup : StartupActivity {
             val username = data[0]
             val decryptedPassword = String(CredentialsController().decrypt(data[1].toByteArray()))
 
-            if (Authentication().checkCredentials(username, decryptedPassword, true)) {
+            /*if (Authentication().checkCredentials(username, decryptedPassword, true)) {
                 Authentication.alreadyLoggedIn = true
-            }
+            }*/
         }
 
 
