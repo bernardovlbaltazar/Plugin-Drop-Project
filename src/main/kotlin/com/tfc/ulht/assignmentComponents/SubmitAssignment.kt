@@ -41,7 +41,7 @@ import kotlin.collections.ArrayList
 
 class SubmitAssignment : AnAction() {
 
-    private val REQUEST_URL = "${Globals.REQUEST_URL}/upload"
+    private val REQUEST_URL = "${Globals.REQUEST_URL}/api/student/submissions/new"
     private val listeners: MutableList<SubmissionListener> = ArrayList()
 
     fun addListener(toAdd: SubmissionListener) {
@@ -70,7 +70,7 @@ class SubmitAssignment : AnAction() {
                         File("${projectDirectory}\\projeto.zip")
                     )
                 )
-                .addFormDataPart("assignmentId", Globals.selectedAssignmentID)
+                .addFormDataPart("assignmentId", /*Globals.selectedAssignmentID*/"fp-exemplo-2223")
                 .build()
 
             val request: Request = Request.Builder()
@@ -80,17 +80,19 @@ class SubmitAssignment : AnAction() {
 
             val moshi = Moshi.Builder().build()
             val submissionJsonAdapter = moshi.adapter(SubmissionId::class.java)
-
             Authentication.httpClient.newCall(request).execute().use { response ->
                 if (response.isSuccessful) {
                     if (response.code() == 200) {
-                        val submission = submissionJsonAdapter.fromJson(response.body()!!.source())!!
+                        val submissionId = submissionJsonAdapter.fromJson(response.body()!!.source())!!
+                        JOptionPane.showMessageDialog(null, "<html>The submission from the assignment <b>${Globals.selectedAssignmentID}</b> has been submitted!</html>")
                     }
                 } else if (!response.isSuccessful && response.code() == 500) {
+
                     val errorJsonAdapter = moshi.adapter(ErrorMessage::class.java)
                     val errorMessage = errorJsonAdapter.fromJson(response.body()!!.source())!!
                     Messages.showMessageDialog(errorMessage.error, "Submission", Messages.getErrorIcon())
                 }
+
             }
 
         }
@@ -98,7 +100,8 @@ class SubmitAssignment : AnAction() {
 }
 
 @JsonClass(generateAdapter = true)
-data class SubmissionId(@Json(name = "submissionId") val submissionNumber: Int)
+data class SubmissionId(
+    @Json(name = "submissionId") val submissionNumber: Int)
 
 @JsonClass(generateAdapter = true)
 data class ErrorMessage(val error: String)
